@@ -31,7 +31,7 @@ call_value(words)
 
 
 def update_text(your_text):
-    return int(your_text[your_text.index(":") + 1 :]) + 10
+    return int(your_text[your_text.index(":") + 1:]) + 10
 
 
 print(update_text("результат операции: 42"))
