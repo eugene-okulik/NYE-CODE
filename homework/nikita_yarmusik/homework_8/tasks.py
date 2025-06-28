@@ -20,4 +20,14 @@ def fibonacci_generator():
         a, b = b, a + b
 
 
-fibonacci_generator()
+gen = fibonacci_generator()
+positions = [5, 200, 1000, 10000]
+i = 1
+
+for num in gen:
+    if i in positions:
+        print(num)
+
+    if i >= max(positions):
+        break
+    i += 1
