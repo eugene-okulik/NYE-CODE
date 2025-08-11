@@ -27,8 +27,9 @@ class Daisies(Flowers):
         self.number_of_petals = number_of_petals
 
     def __str__(self):
-        return (f'Название: {self.name}, высота стебля: {self.height}, цвет: {self.color}, '
-                f'форма лепестков: {self.number_of_petals}, стоимость: {self.cost}') if self.in_stock else 'Ромашек нет!'
+        return (f'Название: {self.name}, высота стебля: {self.height}, '
+                f'цвет: {self.color}, форма лепестков: {self.number_of_petals}, '
+                f'стоимость: {self.cost}') if self.in_stock else 'Ромашек нет!'
 
 
 class BunchOfFlowers:
