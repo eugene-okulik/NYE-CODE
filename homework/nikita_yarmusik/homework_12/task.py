@@ -1,35 +1,39 @@
 class Flowers:
-    def __init__(self, height, color, cost):
+    def __init__(self, name, height, color, cost, life_span, in_stock=True):
+        self.name = name
         self.height = height
         self.color = color
         self.cost = cost
+        self.life_span = life_span
+        self.in_stock = in_stock
 
 
 class Roses(Flowers):
     def __init__(self, height, color, cost, life_span, in_stock, petal_shape):
-        super().__init__(height, color, cost)
-        self.name = 'Розы'
-        self.life_span = life_span
-        self.in_stock = in_stock
+        super().__init__('Розы', height, color, cost, life_span, in_stock)
         self.petal_shape = petal_shape
 
     def __str__(self):
         return (f'Название: {self.name}, высота стебля: {self.height}, цвет: {self.color}, '
-                f'форма лепестков: {self.petal_shape}, стоимость: {self.cost}') if self.in_stock else 'Роз нет!'
+                f'форма лепестков: {self.petal_shape}, '
+                f'стоимость: {self.cost}') if self.in_stock else f'{self.name} нет!'
+
+    def __repr__(self):
+        return self.__str__()
 
 
 class Daisies(Flowers):
     def __init__(self, height, color, cost, life_span, in_stock, number_of_petals):
-        super().__init__(height, color, cost)
-        self.name = 'Ромашки'
-        self.life_span = life_span
-        self.in_stock = in_stock
+        super().__init__('Ромашки', height, color, cost, life_span, in_stock)
         self.number_of_petals = number_of_petals
 
     def __str__(self):
         return (f'Название: {self.name}, высота стебля: {self.height}, '
-                f'цвет: {self.color}, форма лепестков: {self.number_of_petals}, '
-                f'стоимость: {self.cost}') if self.in_stock else 'Ромашек нет!'
+                f'цвет: {self.color}, количество лепестков: {self.number_of_petals}, '
+                f'стоимость: {self.cost}') if self.in_stock else f'{self.name} нет!'
+
+    def __repr__(self):
+        return self.__str__()
 
 
 class BunchOfFlowers:
@@ -46,16 +50,11 @@ class BunchOfFlowers:
         return sum(f.life_span for f in self.all_flowers) / len(self.all_flowers)
 
     def sort_flowers(self, parameter):
-        key_map = {
-            "height": lambda f: f.height,
-            "color": lambda f: f.color,
-            "life_span": lambda f: f.life_span,
-            "cost": lambda f: f.cost,
-        }
-        if parameter in key_map:
-            sorted_flowers = sorted(self.all_flowers, key=key_map[parameter])
-            return ' '.join([str(f) for f in sorted_flowers])
-        return None
+        if hasattr(self.all_flowers[0], parameter):
+            return sorted(
+                self.all_flowers, key=lambda flower: getattr(flower, parameter)
+            )
+        return []
 
     def find_flowers(self, parameter, value):
         result = []
@@ -68,7 +67,10 @@ class BunchOfFlowers:
                 result.append(f)
             elif parameter == "cost" and f.cost == value:
                 result.append(f)
-        return [str(f) for f in result]
+        return result
+
+    def __str__(self):
+        return "\n".join(str(f) for f in self.all_flowers)
 
 
 premium_roses = Roses(120, "оранжевый", 200, 2, True, "помпонная")
