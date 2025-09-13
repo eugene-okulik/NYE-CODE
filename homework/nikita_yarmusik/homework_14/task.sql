@@ -1,54 +1,54 @@
-INSERT INTO students (name, second_name, group_id)
+INSERT INTO students (name, second_name)
 VALUES
-    ('Mikita', 'Tester', 1);
+    ('Mikita', 'Tester');
+
+SET @student_id = LAST_INSERT_ID();
 
 INSERT INTO books (title, taken_by_student_id)
 VALUES
-    ('Very interesting book 1', (SELECT ID FROM students
-                                           WHERE name = 'Mikita' and second_name = 'Tester')),
-    ('Very interesting book 2', (SELECT ID FROM students
-                                           WHERE name = 'Mikita' and second_name = 'Tester'));
+    ('Very very interesting book 1', @student_id),
+    ('Very very interesting book 2', @student_id);
 
 INSERT INTO `groups` (title, start_date, end_date)
 VALUES
-    ('Super Group', '11.09.2025', '10.09.2027');
+    ('Super puper Group', '11.09.2025', '10.09.2027');
 
-UPDATE students SET group_id = (SELECT id FROM `groups` WHERE title = 'Super Group' )
-                WHERE name = 'Mikita' and second_name = 'Tester';
+UPDATE students SET group_id = (SELECT id FROM `groups` WHERE title = 'Super puper Group')
+                WHERE id = @student_id;
 
-INSERT INTO subjects (title) VALUES ('Super Subject 1'), ('Super Subject 2');
+INSERT INTO subjects (title) VALUES ('Super puper Subject 1'), ('Super puper Subject 2');
 
 INSERT INTO lessons (title, subject_id)
 VALUES
-    ('Super Lesson 1 for Super Subject 1', (SELECT id FROM subjects WHERE title = 'Super Subject 1')),
-    ('Super Lesson 2 for Super Subject 1', (SELECT id FROM subjects WHERE title = 'Super Subject 1')),
-    ('Super Lesson 1 for Super Subject 2', (SELECT id FROM subjects WHERE title = 'Super Subject 2')),
-    ('Super Lesson 2 for Super Subject 2', (SELECT id FROM subjects WHERE title = 'Super Subject 2'));
+    ('Super puper Lesson 1 for Super puper Subject 1', (SELECT id FROM subjects WHERE title = 'Super puper Subject 1')),
+    ('Super puper Lesson 2 for Super puper Subject 1', (SELECT id FROM subjects WHERE title = 'Super puper Subject 1')),
+    ('Super puper Lesson 1 for Super puper Subject 2', (SELECT id FROM subjects WHERE title = 'Super puper Subject 2')),
+    ('Super puper Lesson 2 for Super puper Subject 2', (SELECT id FROM subjects WHERE title = 'Super puper Subject 2'));
 
 INSERT INTO marks (value, lesson_id, student_id)
 VALUES
     ('5',
-     (SELECT id FROM lessons WHERE title = 'Super Lesson 1 for Super Subject 1'),
-     (SELECT id FROM students WHERE name = 'Mikita' and second_name = 'Tester')
+     (SELECT id FROM lessons WHERE title = 'Super puper Lesson 1 for Super puper Subject 1'),
+     @student_id
     ),
      ('4',
-     (SELECT id FROM lessons WHERE title = 'Super Lesson 2 for Super Subject 1'),
-     (SELECT id FROM students WHERE name = 'Mikita' and second_name = 'Tester')
+     (SELECT id FROM lessons WHERE title = 'Super puper Lesson 2 for Super puper Subject 1'),
+     @student_id
     ),
     ('3',
-     (SELECT id FROM lessons WHERE title = 'Super Lesson 1 for Super Subject 2'),
-     (SELECT id FROM students WHERE name = 'Mikita' and second_name = 'Tester')
+     (SELECT id FROM lessons WHERE title = 'Super puper Lesson 1 for Super puper Subject 2'),
+     @student_id
     ),
      ('5',
-     (SELECT id FROM lessons WHERE title = 'Super Lesson 2 for Super Subject 2'),
-     (SELECT id FROM students WHERE name = 'Mikita' and second_name = 'Tester')
+     (SELECT id FROM lessons WHERE title = 'Super puper Lesson 2 for Super puper Subject 2'),
+     @student_id
     );
 
 SELECT value FROM  marks
-             WHERE student_id = (SELECT id FROM students WHERE name = 'Mikita' and second_name = 'Tester');
+             WHERE student_id = @student_id;
 
 SELECT title FROM books
-             WHERE taken_by_student_id = (SELECT id FROM students WHERE name = 'Mikita' and second_name = 'Tester');
+             WHERE taken_by_student_id = @student_id;
 
 SELECT
     st.id AS student_id,
@@ -70,4 +70,4 @@ LEFT JOIN lessons l
     ON m.lesson_id = l.id
 LEFT JOIN subjects s
     ON l.subject_id = s.id
-WHERE st.name = 'Mikita';
+WHERE st.id = @student_id;
