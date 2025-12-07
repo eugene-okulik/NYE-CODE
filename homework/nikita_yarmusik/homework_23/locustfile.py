@@ -1,6 +1,8 @@
-from locust import HttpUser, task, between
-from faker import Faker
 import random
+
+from faker import Faker
+
+from locust import HttpUser, between, task
 
 
 class ObjectUser(HttpUser):
@@ -11,7 +13,6 @@ class ObjectUser(HttpUser):
         self.faker = Faker()
         self.created_ids = []
 
-
     def generate_object_data(self):
         return {
             "name": f"{self.faker.unique.word()}_{self.faker.random_number(digits=3)}",
@@ -20,7 +21,6 @@ class ObjectUser(HttpUser):
                 "size": self.faker.random_element(["s", "m", "l", "xl", "xxl"])
             }
         }
-
 
     @task(2)
     def get_all_objects(self):
